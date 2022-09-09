@@ -1,0 +1,4 @@
+elsa/.ipynb_checkpoints
+elsa/__pycache__
+*.egg-info*
+examples/ml-25m*

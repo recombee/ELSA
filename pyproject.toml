@@ -1,0 +1,10 @@
+[tool.black]
+line-length = 160
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
+[tool.pylint.format]
+max-line-length = "160"
