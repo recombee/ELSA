@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="elsarec",
-    version="0.1.0",
+    version="0.1.1",
     description="Scalable Linear Shallow Autoencoder for Collaborative Filtering",
     author="Recombee",
     author_email="vojtech.vancura@recombee.com",
@@ -27,4 +27,3 @@ setup(
     install_requires=["numpy", "scipy"],
     python_requires=">=3.7",
 )
-
