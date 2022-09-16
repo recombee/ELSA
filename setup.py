@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="elsarec",
-    version="0.1.2",
+    version="0.1.3",
     description="Scalable Linear Shallow Autoencoder for Collaborative Filtering",
     author="Recombee",
     author_email="vojtech.vancura@recombee.com",
