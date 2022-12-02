@@ -83,7 +83,7 @@ class ELSA(tf.keras.layers.Layer):
     def call(self, x):
         A = tf.math.l2_normalize(self.A, axis=-1)
         xA = tf.matmul(x, A, transpose_b=False)
-        xAAT = tf.matmul(xA, feature, transpose_b=True)
+        xAAT = tf.matmul(xA, A, transpose_b=True)
         return xAAT - x
 ```
 
