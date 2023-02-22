@@ -77,8 +77,4 @@ if __name__ == "__main__":
     print("5-fold mean NCDG@100", ncdg100)
     print("5-fold mean Recall@20", recall20)
     print("5-fold mean Recall@50", recall50)
-    
-    pd.concat([
-        pd.read_csv("factors.csv"),
-        pd.DataFrame({"name":[name],"ncdg100":[ncdg100], "recall20":[recall20], "recall50":[recall50]})
-    ]).to_csv("factors.csv", index=False)
+
