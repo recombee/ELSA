@@ -94,3 +94,27 @@ class ELSA(tf.keras.layers.Layer):
 
 ### Troubleshooting
 If you encounter a problem or have a question about ELSA, do not hesitate to create an issue and ask. In case of an implementation problem, please include the Python, PyTorch and CUDA versions in the description of the issue.
+
+### Cite us
+
+Please consider citing our paper:
+
+```
+@inproceedings{10.1145/3523227.3551482,
+author = {Van\v{c}ura, Vojt\v{e}ch and Alves, Rodrigo and Kasalick\'{y}, Petr and Kord\'{\i}k, Pavel},
+title = {Scalable Linear Shallow Autoencoder for Collaborative Filtering},
+year = {2022},
+isbn = {9781450392785},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3523227.3551482},
+doi = {10.1145/3523227.3551482},
+abstract = {Recently, the RS research community has witnessed a surge in popularity for shallow autoencoder-based CF methods. Due to its straightforward implementation and high accuracy$
+booktitle = {Proceedings of the 16th ACM Conference on Recommender Systems},
+pages = {604–609},
+numpages = {6},
+keywords = {Linear models, Shallow autoencoders, Implicit feedback recommendation},
+location = {Seattle, WA, USA},
+series = {RecSys '22}
+}
+```
