@@ -59,7 +59,9 @@ related = model.similar_items(N=100, batch_size=128, sources=itemids)
 
 ### Reproducibility
 
-Please get in touch with us if you want to reproduce the results from our paper. 
+Instructions for reproducing the results from the paper on the MovieLens20M dataset are in the branch `reproduce_movielens` https://github.com/recombee/ELSA/tree/reproduce_movielens.
+
+Reproducibility instructions for Netflix and Goodbooks10k datasets will follow soon.
 
 ### Tensorflow users
 
