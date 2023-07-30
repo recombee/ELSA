@@ -37,7 +37,6 @@ num_epochs = 5
 batch_size = 128
 
 model = ELSA(n_items=items_cnt, device=device, n_dims=factors)
-model.compile()
 
 model.fit(X_csr, batch_size=batch_size, epochs=num_epochs)
 
