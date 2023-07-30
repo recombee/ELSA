@@ -33,15 +33,15 @@ class ELSA(torch.nn.Module):
         self.__device = device or torch.device("cuda")
         self.__items_cnt = n_items
         self.__optimizer = torch.optim.NAdam(self.parameters(), lr=lr)
-        # Loss function of ELSA is NMSE, but PyTorch implements only MSE. Normalization is done manually in train_step function
-        self.__criterion = torch.nn.MSELoss()
+        # NMSELoss is implemented by us in this file, because PyTorch implements only MSELoss
+        self.__nmse = NMSELoss()
         self.__cosine = torch.nn.CosineSimilarity(dim=1, eps=1e-08)
         self.to(self.__device)
 
-    def train_step(self, x, y):
+    def train_step(self, x: torch.Tensor, y: torch.Tensor):
         self.zero_grad()
         output = self(x)
-        loss = self.__criterion(torch.nn.functional.normalize(output, dim=-1), torch.nn.functional.normalize(y, dim=-1))
+        loss = self.__nmse(output, y)
         loss.backward()
         self.__optimizer.step()
         return loss, output
@@ -63,7 +63,7 @@ class ELSA(torch.nn.Module):
             torch.Tensor,
             scipy.sparse.csr_matrix,
         ] = None,
-        verbose=True,
+        verbose: bool = True,
     ):
         """
         Train model with given training data
@@ -122,7 +122,7 @@ class ELSA(torch.nn.Module):
                     log_dict = {
                         "Epoch": f"{epoch_index}/{epochs}",
                         "Step": f"{step}/{total_steps}",
-                        "nmse_train": round(np.mean(cosine_losses_per_epoch), 4),
+                        "nmse_train": round(np.mean(nmse_losses_per_epoch), 8),
                         "cosine_train": round(np.mean(cosine_losses_per_epoch), 4),
                         "time": f"{(time.time()-epoch_start):2f}s",
                     }
@@ -134,7 +134,7 @@ class ELSA(torch.nn.Module):
             train_end = time.time()
             log_dict = {
                 "Epoch": f"{epoch_index}/{epochs}",
-                "nmse_train": round(losses["nmse_train"][-1], 4),
+                "nmse_train": round(losses["nmse_train"][-1], 8),
                 "cosine_train": round(losses["cosine_train"][-1], 4),
                 "training time": f"{(train_end - epoch_start):2f}s",
             }
@@ -147,10 +147,7 @@ class ELSA(torch.nn.Module):
                     for step, io_batch in enumerate(validation_dataloader, start=1):
                         output = self(io_batch)
                         nmse_losses_per_epoch.append(
-                            self.__criterion(
-                                torch.nn.functional.normalize(output, dim=-1),
-                                torch.nn.functional.normalize(io_batch, dim=-1),
-                            ).item()
+                            self.__nmse(output, io_batch).item()
                         )
                         cosine_losses_per_epoch.append(1 - torch.mean(self.__cosine(io_batch, output), dim=-1).item())
 
@@ -453,6 +450,15 @@ class ELSA(torch.nn.Module):
     @staticmethod
     def __get_progress_log(values: dict):
         return "; ".join(f"{key}: {val}" for key, val in values.items())
+
+
+class NMSELoss(torch.nn.Module):
+    def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        return torch.nn.functional.mse_loss(
+            torch.nn.functional.normalize(input, dim=-1),
+            torch.nn.functional.normalize(target, dim=-1),
+            reduction='mean'
+        )
 
 
 class DenseMatrixDataset(torch.utils.data.Dataset):
